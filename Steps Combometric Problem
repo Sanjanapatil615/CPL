@@ -1,0 +1,36 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main() {
+    const int LIMIT = 1000000; // 10^6
+    vector<long long> prev_row = {1};
+
+    while (true) {
+        // Print current row
+        for (size_t i = 0; i < prev_row.size(); ++i) {
+            if (i > 0) cout << " ";
+            cout << prev_row[i];
+        }
+        cout << endl;
+
+        // Prepare next row
+        vector<long long> next_row;
+        next_row.push_back(1);
+        bool over_limit = false;
+
+        for (size_t i = 1; i < prev_row.size(); ++i) {
+            long long val = prev_row[i - 1] + prev_row[i];
+            if (val >= LIMIT) over_limit = true;
+            next_row.push_back(val);
+        }
+
+        next_row.push_back(1);
+
+        if (over_limit) break;
+        prev_row = next_row;
+    }
+
+    return 0;
+}
