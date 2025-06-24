@@ -1,0 +1,41 @@
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    unsigned int n;
+
+    while (cin >> n) {
+        unsigned long long p = 1;
+        bool stanTurn = true;
+
+        while (p < n) {
+            if (stanTurn) {
+                p *= 9;
+            } else {
+                p *= 2;
+            }
+            stanTurn = !stanTurn;
+        }
+
+        if (!stanTurn) {
+            cout << "Stan wins." << endl;
+        } else {
+            cout << "Ollie wins." << endl;
+        }
+    }
+
+    return 0;
+}
+
+
+/*
+Sample input
+162
+17
+34012226
+Sample Output
+Stan wins.
+Ollie wins.
+Stan wins.
+*/
