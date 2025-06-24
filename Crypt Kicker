@@ -4,33 +4,68 @@
 
 using namespace std;
 
-// Function to encrypt the text (Adds 5 to ASCII values, keeps spaces)
+// Function to encrypt the text (adds 5 to ASCII values, keeps spaces and line breaks)
 string encryptText(const string& input) {
-string encrypted;
+    string encrypted;
+    for (char c : input) {
+        if (isalpha(c)) {
+            encrypted += char(c + 5);  // Shift character
+        } else {
+            encrypted += c;  // Keep spaces and newlines
+        }
+    }
+    return encrypted;
+}
 
-for (char c : input) {
-if (isalpha(c)) {
-encrypted += char(c + 5); // Increase ASCII value by 5
-} else {
-encrypted += c; // Keep spaces and other characters unchanged
-}
-}
-return encrypted;
-}
-// Function to convert encrypted text into '*' format while keeping spaces
-
+// Function to convert encrypted text into '*' format while keeping spaces and line breaks
 string encryptedInAsterisks(const string& encryptedText) {
-
-string encryptedStars;
-
-for (char c : encryptedText) {
-
-encryptedStars += (c == ' ') ? ' ' : '*'; // Preserve spaces
-
+    string encryptedStars;
+    for (char c : encryptedText) {
+        encryptedStars += (c == ' ' || c == '\n') ? c : '*';
+    }
+    return encryptedStars;
 }
 
-return encryptedStars;
+// Function to decrypt the text (subtracts 5 from ASCII values)
+string decryptText(const string& encrypted) {
+    string decrypted;
+    for (char c : encrypted) {
+        if (isalpha(c)) {
+            decrypted += char(c - 5);
+        } else {
+            decrypted += c;
+        }
+    }
+    return decrypted;
+}
 
+int main() {
+    int numLines;
+    cout << "Enter the number of lines: ";
+    cin >> numLines;
+    cin.ignore(); // Ignore newline after number input
+
+    string combinedInput;
+    // Get user input and merge all lines into a single string
+    for (int i = 0; i < numLines; i++) {
+        string line;
+        cout << "Enter line " << i + 1 << ": ";
+        getline(cin, line);
+        combinedInput += line + "\n"; // Preserve line breaks
+    }
+
+    // Process encryption and decryption on the combined input
+    string encryptedText = encryptText(combinedInput);
+    string encryptedStars = encryptedInAsterisks(encryptedText);
+    string decryptedText = decryptText(encryptedText);
+
+    // Output results
+    cout << "\nOriginal Input:\n" << combinedInput;
+    cout << "Encrypted Text:\n" << encryptedText;
+    cout << "Encrypted Text in '*' format:\n" << encryptedStars;
+    cout << "Decrypted Text:\n" << decryptedText;
+
+    return 0;
 }
 
 
