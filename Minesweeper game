@@ -1,0 +1,120 @@
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+const char MINE = 'M';
+const char HIDDEN = '*';
+
+struct Cell {
+    char value;  // 'M' for mine or '0'-'8' for numbers
+    bool revealed;
+};
+
+// Create the board and place mines
+void createMinesweeper(vector<vector<Cell>>& board, int rows, int cols, int num_mines) {
+    // Initialize empty board
+    board.resize(rows, vector<Cell>(cols, {'0', false}));
+    int placed_mines = 0;
+    srand(time(0));
+
+    // Place mines
+    while (placed_mines < num_mines) {
+        int r = rand() % rows;
+        int c = rand() % cols;
+        if (board[r][c].value != MINE) {
+            board[r][c].value = MINE;
+            placed_mines++;
+
+            // Increment adjacent cells
+            for (int i = max(0, r - 1); i <= min(rows - 1, r + 1); i++) {
+                for (int j = max(0, c - 1); j <= min(cols - 1, c + 1); j++) {
+                    if (board[i][j].value != MINE) {
+                        board[i][j].value++;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Print the current visible board
+void printBoard(const vector<vector<Cell>>& board, bool revealAll = false) {
+    for (const auto& row : board) {
+        for (const auto& cell : row) {
+            if (revealAll || cell.revealed) {
+                cout << cell.value << " ";
+            } else {
+                cout << HIDDEN << " ";
+            }
+        }
+        cout << endl;
+    }
+}
+
+void playMinesweeper(int rows, int cols, int num_mines) {
+    vector<vector<Cell>> board;
+    createMinesweeper(board, rows, cols, num_mines);
+
+    while (true) {
+        cout << "\nCurrent Board:\n";
+        printBoard(board);
+
+        int r, c;
+        cout << "Enter row and column (e.g., 1 2): ";
+        cin >> r >> c;
+
+        if (cin.fail() || r < 0 || r >= rows || c < 0 || c >= cols) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Invalid input! Try again.\n";
+            continue;
+        }
+
+        if (board[r][c].value == MINE) {
+            cout << "\nGame Over! You hit a mine!\n";
+            printBoard(board, true);
+            break;
+        } else {
+            board[r][c].revealed = true;
+        }
+    }
+}
+
+int main() {
+    // Start game with 4x4 board and 4 mines
+    playMinesweeper(4, 4, 4);
+    return 0;
+}
+
+
+/* 
+Sample output"
+
+Current Board:
+* * * *
+* * * *
+* * * *
+* * * *
+
+Enter row and column (e.g., 1 2): 0 0
+
+Current Board:
+1 * * *
+* * * *
+* * * *
+* * * *
+
+Enter row and column (e.g., 1 2): 1 1
+
+Current Board:
+1 * * *
+* 2 * *
+* * * *
+* * * *
+
+
+
+*/
