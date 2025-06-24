@@ -1,0 +1,120 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+// Function to encrypt the text (Adds 5 to ASCII values, keeps spaces)
+string encryptText(const string& input) {
+string encrypted;
+
+for (char c : input) {
+if (isalpha(c)) {
+encrypted += char(c + 5); // Increase ASCII value by 5
+} else {
+encrypted += c; // Keep spaces and other characters unchanged
+}
+}
+return encrypted;
+}
+// Function to convert encrypted text into '*' format while keeping spaces
+
+string encryptedInAsterisks(const string& encryptedText) {
+
+string encryptedStars;
+
+for (char c : encryptedText) {
+
+encryptedStars += (c == ' ') ? ' ' : '*'; // Preserve spaces
+
+}
+
+return encryptedStars;
+
+}
+
+
+// Function to decrypt the text (Fixing character boundaries)
+
+string decryptText(const string& encrypted) {
+
+string decrypted;
+
+for (char c : encrypted) {
+
+if (isalpha(c)) {
+
+decrypted += char(c - 5); // Decrease ASCII value by 5
+
+} else {
+
+decrypted += c; // Keep spaces and other characters unchanged
+
+}
+
+}
+
+return decrypted;
+
+}
+
+
+int main() {
+
+int numLines;
+
+cout << "Enter the number of lines: ";
+
+cin >> numLines;
+
+cin.ignore(); // Ignore newline after entering number of lines
+
+
+string combinedInput;
+
+
+// Get user input and merge all lines into a single string
+for (int i = 0; i < numLines; i++) {
+string line;
+cout << "Enter line " << i + 1 << ": ";
+getline(cin, line);
+combinedInput += line + "\n"; // Preserve line breaks
+}
+
+
+// Process encryption and decryption on the combined input
+string encryptedText = encryptText(combinedInput);
+string encryptedStars = encryptedInAsterisks(encryptedText);
+string decryptedText = decryptText(encryptedText);
+
+
+// Output combined results
+cout << "\nOriginal Input:\n" << combinedInput;
+cout << "\nEncrypted Text:\n" << encryptedText;
+cout << "\nEncrypted Text in '*' format:\n" << encryptedStars;
+cout << "\nDecrypted Text:\n" << decryptedText;
+
+
+return 0;
+
+}
+
+/* Output 
+Enter the number of lines: 2
+Enter line 1: dog
+Enter line 2: tee
+
+Original Input:
+dog
+tee
+
+Encrypted Text:
+itl
+yjj
+
+Encrypted Text in '*' format:
+********
+Decrypted Text:
+dog
+tee
+
